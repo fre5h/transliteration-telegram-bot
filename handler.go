@@ -23,6 +23,8 @@ func HandleTelegramWebHook(w http.ResponseWriter, r *http.Request) {
 	var result string
 	if "" == update.Message.Text {
 		result = "🤔 Вибачайте, але я вмію траслітерувати лише текстові повідомлення"
+	} else if "/start" == update.Message.Text {
+		result = "Просто напишіть мені текст на українській мові 🇺🇦 і у відповідь отримаєте транслітерований текст 🇬🇧"
 	} else {
 		result = transliteration.UkrToLat(update.Message.Text)
 	}
