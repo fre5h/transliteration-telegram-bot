@@ -1,2 +1,1 @@
-# transliteration-telegram-bot
-Transliteration Telegram Bot
+# Transliteration Telegram Bot
