@@ -1,0 +1,13 @@
+{
+    "name": "Start on Heroku: Go",
+    "description": "Transliteration Telegram Bot Example App",
+    "keywords": [
+        "telegram",
+        "go",
+        "bot",
+        "transliteration",
+        "ukrainian"
+    ],
+    "website": "https://github.com/fre5h/transliteration-telegram-bot",
+    "repository": "https://github.com/fre5h/transliteration-telegram-bot"
+}

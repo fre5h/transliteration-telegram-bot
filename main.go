@@ -13,19 +13,35 @@ import (
 	"github.com/fre5h/transliteration-go"
 )
 
+type Update struct {
+	UpdateId int     `json:"update_id"`
+	Message  Message `json:"message"`
+}
+
+type Message struct {
+	Text string `json:"text"`
+	Chat Chat   `json:"chat"`
+}
+
+type Chat struct {
+	Id int `json:"id"`
+}
+
 func main() {
-	http.HandleFunc("/", HandleTelegramWebHook)
-	http.ListenAndServe(":80", nil)
+	http.HandleFunc("/handler/"+os.Getenv("WEB_SOCKET_SECRET"), HandleTelegramWebHook)
+
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
 }
 
 func HandleTelegramWebHook(w http.ResponseWriter, r *http.Request) {
+	var result string
+
 	var update, err = parseTelegramRequest(r)
 	if err != nil {
 		log.Printf("error parsing update, %s", err.Error())
 		return
 	}
 
-	var result string
 	if "" == update.Message.Text {
 		result = "🤔 Вибачайте, але я вмію траслітерувати лише текстові повідомлення"
 	} else if "/start" == update.Message.Text {
