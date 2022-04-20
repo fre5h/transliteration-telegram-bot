@@ -1,4 +1,4 @@
-package transliteration_telegram_bot_handler
+package main
 
 import (
 	"bytes"
