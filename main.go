@@ -1,4 +1,4 @@
-package transliteration_telegram_bot_handler
+package main
 
 import (
 	"encoding/json"
@@ -12,6 +12,11 @@ import (
 
 	"github.com/fre5h/transliteration-go"
 )
+
+func main() {
+	http.HandleFunc("/", HandleTelegramWebHook)
+	http.ListenAndServe(":80", nil)
+}
 
 func HandleTelegramWebHook(w http.ResponseWriter, r *http.Request) {
 	var update, err = parseTelegramRequest(r)

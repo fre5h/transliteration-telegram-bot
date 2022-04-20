@@ -1,4 +1,4 @@
-package transliteration_telegram_bot_handler
+package main
 
 type Update struct {
 	UpdateId int     `json:"update_id"`
