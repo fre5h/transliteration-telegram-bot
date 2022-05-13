@@ -2,6 +2,11 @@
 
 This is a source code of [@transliteration_ua_bot](https://t.me/transliteration_ua_bot)
 
+[![Build Status](https://img.shields.io/github/workflow/status/fre5h/transliteration-telegram-bot/CI/main?style=flat-square)](https://github.com/fre5h/transliteration-telegram-bot/actions?query=workflow%3ACI+branch%3Amain+)
+[![CodeCov](https://img.shields.io/codecov/c/github/fre5h/transliteration-telegram-bot.svg?style=flat-square)](https://codecov.io/github/fre5h/transliteration-telegram-bot)
+[![License](https://img.shields.io/github/license/fre5h/transliteration-telegram-bot?style=flat-square)](https://pkg.go.dev/github.com/fre5h/transliteration-telegram-bot)
+[![Gitter](https://img.shields.io/badge/gitter-join%20chat-brightgreen.svg?style=flat-square)](https://gitter.im/fre5h/transliteration-telegram-bot)
+
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 ## Requirements 🧐

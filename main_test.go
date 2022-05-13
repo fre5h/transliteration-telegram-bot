@@ -48,3 +48,13 @@ func TestParseTelegramRequestInvalid(t *testing.T) {
 		t.Error("Expected an error, got <nil>")
 	}
 }
+
+func TestParseTelegramRequestErrorOnDecode(t *testing.T) {
+	req := httptest.NewRequest("POST", "https://myTelegramWebHookHandler.com/secretToken", bytes.NewBuffer([]byte{1, 2}))
+
+	var _, err = parseTelegramRequest(req)
+
+	if err == nil {
+		t.Error("Expected an error, got <nil>")
+	}
+}
