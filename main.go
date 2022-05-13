@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -33,7 +34,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
 }
 
-func HandleTelegramWebHook(w http.ResponseWriter, r *http.Request) {
+func HandleTelegramWebHook(_ http.ResponseWriter, r *http.Request) {
 	var result string
 
 	var update, err = parseTelegramRequest(r)
@@ -64,7 +65,6 @@ func sendTextMessageToChat(chatId int, text string) (string, error) {
 			"chat_id": {strconv.Itoa(chatId)},
 			"text":    {text},
 		})
-	defer response.Body.Close()
 
 	if errRequest != nil {
 		log.Printf("error when posting text to the chat: %s", errRequest.Error())
@@ -72,7 +72,15 @@ func sendTextMessageToChat(chatId int, text string) (string, error) {
 		return "", errRequest
 	}
 
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			log.Printf("error on closing body: %s", err.Error())
+		}
+	}(response.Body)
+
 	var bodyBytes, errRead = ioutil.ReadAll(response.Body)
+
 	if errRead != nil {
 		log.Printf("error in parsing telegram answer %s", errRead.Error())
 
