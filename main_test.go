@@ -50,8 +50,7 @@ func TestParseTelegramRequestInvalid(t *testing.T) {
 }
 
 func TestParseTelegramRequestErrorOnDecode(t *testing.T) {
-	requestBody := []byte{1, 2}
-	req := httptest.NewRequest("POST", "https://myTelegramWebHookHandler.com/secretToken", bytes.NewBuffer(requestBody))
+	req := httptest.NewRequest("POST", "https://myTelegramWebHookHandler.com/secretToken", bytes.NewBuffer([]byte{1, 2}))
 
 	var _, err = parseTelegramRequest(req)
 
