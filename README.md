@@ -12,7 +12,7 @@ This is a source code of [@transliteration_ua_bot](https://t.me/transliteration_
 ## Requirements 🧐
 
 * GO >= 1.16
-* [Transliteration GO library](https://github.com/fre5h/transliteration-telegram-bot)
+* [Transliteration GO library](https://github.com/fre5h/transliteration-go)
 
 ## Info ℹ️
 
