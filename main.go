@@ -92,9 +92,7 @@ func sendTextMessageToChat(chatId int, text string) (string, error) {
 	return bodyString, nil
 }
 
-func parseTelegramRequest(r *http.Request) (*Update, error) {
-	var update Update
-
+func parseTelegramRequest(r *http.Request) (update *Update, err error) {
 	if err := json.NewDecoder(r.Body).Decode(&update); err != nil {
 		log.Printf("could not decode incoming update %s", err.Error())
 
@@ -107,5 +105,5 @@ func parseTelegramRequest(r *http.Request) (*Update, error) {
 		return nil, errors.New("invalid update id of 0 indicates failure to parse incoming update")
 	}
 
-	return &update, nil
+	return update, nil
 }
