@@ -52,7 +52,7 @@ func HandleTelegramWebHook(_ http.ResponseWriter, r *http.Request) {
 	}
 
 	if responseBody, err := sendTextMessageToChat(update.Message.Chat.Id, result); err != nil {
-		log.Printf("error %s from telegram, reponse body is %s", err.Error(), responseBody)
+		log.Printf("error %s from telegram, response body is %s", err.Error(), responseBody)
 	}
 }
 

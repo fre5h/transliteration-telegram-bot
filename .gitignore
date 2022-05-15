@@ -7,6 +7,7 @@
 
 # GoLand
 .idea/*
+!.idea/runConfigurations
 
 # Test binary, built with `go test -c`
 *.test
