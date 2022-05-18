@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"net/http"
 	"net/http/httptest"
 	"testing"
 )
@@ -22,7 +23,7 @@ func TestParseTelegramRequest(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed to marshal update in json, got %s", err.Error())
 	}
-	req := httptest.NewRequest("POST", "https://myTelegramWebHookHandler.com/secretToken", bytes.NewBuffer(requestBody))
+	req := httptest.NewRequest(http.MethodPost, "https://myTelegramWebHookHandler.com/secretToken", bytes.NewBuffer(requestBody))
 
 	var updateToTest, errParse = parseTelegramRequest(req)
 	if errParse != nil {
@@ -40,7 +41,7 @@ func TestParseTelegramRequestInvalid(t *testing.T) {
 	}
 
 	requestBody, _ := json.Marshal(msg)
-	req := httptest.NewRequest("POST", "https://myTelegramWebHookHandler.com/secretToken", bytes.NewBuffer(requestBody))
+	req := httptest.NewRequest(http.MethodPost, "https://myTelegramWebHookHandler.com/secretToken", bytes.NewBuffer(requestBody))
 
 	var _, err = parseTelegramRequest(req)
 
@@ -50,7 +51,7 @@ func TestParseTelegramRequestInvalid(t *testing.T) {
 }
 
 func TestParseTelegramRequestErrorOnDecode(t *testing.T) {
-	req := httptest.NewRequest("POST", "https://myTelegramWebHookHandler.com/secretToken", bytes.NewBuffer([]byte{1, 2}))
+	req := httptest.NewRequest(http.MethodPost, "https://myTelegramWebHookHandler.com/secretToken", bytes.NewBuffer([]byte{1, 2}))
 
 	var _, err = parseTelegramRequest(req)
 
