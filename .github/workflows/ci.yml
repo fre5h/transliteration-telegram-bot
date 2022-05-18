@@ -32,7 +32,7 @@ jobs:
           go-version: 1.18
 
       - name: Build
-        run: go build -v ./...
+        run: go build -v ./cmd/main.go
 
   lint:
     needs: test
@@ -65,7 +65,7 @@ jobs:
           go-version: 1.18
 
       - name: Run test coverage
-        run: go test -race -coverprofile=coverage.txt -covermode=atomic
+        run: go test -race -coverprofile=coverage.txt -covermode=atomic ./cmd/
 
       - name: 'Upload to Codecov'
         uses: codecov/codecov-action@v3
