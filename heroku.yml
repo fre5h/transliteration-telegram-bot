@@ -1,5 +1,6 @@
 build:
-  languages:
-    - go
+  docker:
+    web: Dockerfile
+
 run:
-  web: transliteration-telegram-bot
+  web: ./transliteration-telegram-bot
