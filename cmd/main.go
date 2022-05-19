@@ -57,10 +57,10 @@ func HandleTelegramWebHook(_ http.ResponseWriter, r *http.Request) {
 }
 
 func sendTextMessageToChat(chatId int, text string) (string, error) {
-	var borApiUrl = "https://api.telegram.org/bot" + os.Getenv("TELEGRAM_BOT_TOKEN") + "/sendMessage"
+	var botApiUrl = "https://api.telegram.org/bot" + os.Getenv("TELEGRAM_BOT_TOKEN") + "/sendMessage"
 
 	response, errRequest := http.PostForm(
-		borApiUrl,
+		botApiUrl,
 		url.Values{
 			"chat_id": {strconv.Itoa(chatId)},
 			"text":    {text},
