@@ -1,6 +1,8 @@
 FROM golang:1.16.15-alpine AS builder
 RUN mkdir /build
+RUN mkdir /build/internal
 ADD go.mod go.sum cmd/main.go internal/ /build/
+ADD internal/ /build/internal/
 WORKDIR /build
 RUN go build -o transliteration-telegram-bot
 
