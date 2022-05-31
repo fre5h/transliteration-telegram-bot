@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"bytes"
@@ -6,14 +6,16 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/fre5h/transliteration-telegram-bot/internal/model"
 )
 
 func TestParseTelegramRequest(t *testing.T) {
-	var update = Update{
+	var update = model.Update{
 		UpdateId: 1,
-		Message: Message{
+		Message: model.Message{
 			Text: "привіт",
-			Chat: Chat{
+			Chat: model.Chat{
 				Id: 1,
 			},
 		},
