@@ -12,7 +12,7 @@ This is a source code of [@transliteration_ua_bot](https://t.me/transliteration_
 
 ## Requirements 🧐
 
-* GO >= 1.16
+* GO >= 1.18
 * [Transliteration GO library](https://github.com/fre5h/transliteration-go)
 
 ## Info ℹ️
@@ -22,3 +22,7 @@ Ukrainian-to-latin transliteration is done by [rules](https://zakon.rada.gov.ua/
 ## Example 👀
 
 ![example](https://github.com/fre5h/transliteration-telegram-bot/blob/main/example.gif)
+
+## Contributing 🤝
+
+See [CONTRIBUTING](https://github.com/fre5h/transliteration-telegram-bot/blob/master/.github/CONTRIBUTING.md) file.
