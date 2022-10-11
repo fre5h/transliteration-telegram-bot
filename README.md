@@ -8,11 +8,9 @@ This is a source code of [@transliteration_ua_bot](https://t.me/transliteration_
 [![License](https://img.shields.io/github/license/fre5h/transliteration-telegram-bot?style=flat-square)](https://pkg.go.dev/github.com/fre5h/transliteration-telegram-bot)
 [![Gitter](https://img.shields.io/badge/gitter-join%20chat-brightgreen.svg?style=flat-square)](https://gitter.im/fre5h/transliteration-telegram-bot)
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
 ## Requirements 🧐
 
-* GO >= 1.18
+* GO >= 1.19
 * [Transliteration GO library](https://github.com/fre5h/transliteration-go)
 
 ## Info ℹ️
