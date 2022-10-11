@@ -1,6 +1,7 @@
 module github.com/fre5h/transliteration-telegram-bot
 
-// +heroku goVersion go1.18
-go 1.18
+go 1.19
 
 require github.com/fre5h/transliteration-go v1.1.5
+
+require github.com/aws/aws-lambda-go v1.34.1
