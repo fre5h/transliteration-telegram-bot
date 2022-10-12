@@ -1,12 +1,9 @@
 package handler
 
 import (
-	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -20,48 +17,38 @@ import (
 	"github.com/fre5h/transliteration-telegram-bot/internal/model"
 )
 
-func HandleTelegramWebHook(ctx context.Context, request events.LambdaFunctionURLRequest) (events.LambdaFunctionURLResponse, error) {
+func HandleTelegramWebHook(request events.LambdaFunctionURLRequest) (events.LambdaFunctionURLResponse, error) {
 	var update model.Update
 
 	err := json.Unmarshal([]byte(request.Body), &update)
 	if err != nil {
-		return events.LambdaFunctionURLResponse{
-				StatusCode: 500,
-				Body:       err.Error(),
-			},
-			err
+		return events.LambdaFunctionURLResponse{StatusCode: http.StatusInternalServerError, Body: "Error on unmarshaling json"}, nil
 	}
 
 	if 0 == update.UpdateId {
-		errorMessage := "invalid update id of 0 indicates failure to parse incoming update"
-
-		return events.LambdaFunctionURLResponse{
-				StatusCode: 400,
-				Body:       errorMessage,
-			},
-			errors.New(errorMessage)
+		return events.LambdaFunctionURLResponse{StatusCode: http.StatusBadRequest, Body: "Update id of 0 indicates failure to parse incoming update"}, nil
 	}
 
-	var result string
+	if responseBody, err := sendTextMessageToChat(update.Message.Chat.Id, prepareResult(update.Message.Text)); err != nil {
+		log.Printf("error %s from telegram, response body is %s", err.Error(), responseBody)
 
-	switch update.Message.Text {
+		return events.LambdaFunctionURLResponse{StatusCode: http.StatusInternalServerError, Body: "Error on request to Telegram"}, nil
+	}
+
+	return events.LambdaFunctionURLResponse{StatusCode: http.StatusOK, Body: "OK"}, nil
+}
+
+func prepareResult(text string) (result string) {
+	switch text {
 	case "":
 		result = "🤔 Вибачайте, але я вмію транслітерувати лише текстові повідомлення"
 	case "/start":
 		result = "Просто напишіть мені текст на українській мові 🇺🇦 і у відповідь отримаєте транслітерований 🇬🇧 текст"
 	default:
-		result = transliteration.UkrToLat(update.Message.Text)
+		result = transliteration.UkrToLat(text)
 	}
 
-	if responseBody, err := sendTextMessageToChat(update.Message.Chat.Id, result); err != nil {
-		return events.LambdaFunctionURLResponse{
-				Body:       err.Error(),
-				StatusCode: 500,
-			},
-			fmt.Errorf("error %s from telegram, response body is %s", err.Error(), responseBody)
-	}
-
-	return events.LambdaFunctionURLResponse{StatusCode: 200, Body: "OK"}, nil
+	return result
 }
 
 func sendTextMessageToChat(chatId int, text string) (string, error) {
@@ -90,7 +77,7 @@ func sendTextMessageToChat(chatId int, text string) (string, error) {
 		}
 	}(response.Body)
 
-	var bodyBytes, errRead = ioutil.ReadAll(response.Body)
+	var bodyBytes, errRead = io.ReadAll(response.Body)
 
 	if nil != errRead {
 		return "", fmt.Errorf("error in parsing telegram answer %s", errRead.Error())
