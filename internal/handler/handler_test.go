@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"os"
 	"testing"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -33,12 +34,26 @@ import (
 // 	}
 // }
 
-func TestParseTelegramRequestInvalid(t *testing.T) {
-	request := events.LambdaFunctionURLRequest{
-		Body: "{\"update_id\":0}",
-	}
+type MockHttpClient struct {
+	baseUrl string
+	token   string
+}
 
-	var response, _ = HandleTelegramWebHook(request)
+func NewMockHttpClient() *MockHttpClient {
+	return &MockHttpClient{
+		baseUrl: "https://api.telegram.org/bot",
+		token:   os.Getenv("TELEGRAM_BOT_TOKEN"),
+	}
+}
+
+func (c MockHttpClient) SendTextMessageToChat(_ int, _ string) (string, error) {
+	return "OK", nil
+}
+
+func TestParseTelegramRequestInvalid(t *testing.T) {
+	handler := NewLambdaHandler(NewMockHttpClient())
+	request := events.LambdaFunctionURLRequest{Body: "{\"update_id\":0}"}
+	var response, _ = handler.HandleLambdaRequest(request)
 
 	if response.StatusCode != 400 {
 		t.Errorf("Expected status code 400, got %d", response.StatusCode)
@@ -46,11 +61,9 @@ func TestParseTelegramRequestInvalid(t *testing.T) {
 }
 
 func TestParseTelegramRequestErrorOnDecode(t *testing.T) {
-	request := events.LambdaFunctionURLRequest{
-		Body: "123",
-	}
-
-	var response, _ = HandleTelegramWebHook(request)
+	handler := NewLambdaHandler(NewMockHttpClient())
+	request := events.LambdaFunctionURLRequest{Body: "123"}
+	var response, _ = handler.HandleLambdaRequest(request)
 
 	if response.StatusCode != 500 {
 		t.Errorf("Expected status code 500, got %d", response.StatusCode)
