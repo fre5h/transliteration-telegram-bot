@@ -28,12 +28,19 @@ func (c MockFailedTelegramClient) SendTextMessageToChat(_ int, _ string) (string
 	return "FAIL", errors.New("failed request")
 }
 
-type MockHttpClient struct{}
+type MockHttpClient struct {
+	statusCode int
+	body       string
+	err        error
+}
 
-func NewMockHttpClient() *MockHttpClient {
-	return &MockHttpClient{}
+func NewMockHttpClient(statusCode int, body string, err error) *MockHttpClient {
+	return &MockHttpClient{statusCode, body, err}
 }
 
 func (c MockHttpClient) PostForm(_ string, _ url.Values) (*http.Response, error) {
-	return &http.Response{StatusCode: 200, Body: io.NopCloser(strings.NewReader("OK"))}, nil
+	return &http.Response{
+		StatusCode: c.statusCode,
+		Body:       io.NopCloser(strings.NewReader(c.body)),
+	}, c.err
 }

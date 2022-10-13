@@ -56,7 +56,7 @@ func (c TelegramHttpClient) SendTextMessageToChat(chatId int, text string) (stri
 	var bodyBytes, errRead = io.ReadAll(response.Body)
 
 	if nil != errRead {
-		return "", fmt.Errorf("error in parsing telegram answer %s", errRead.Error())
+		return "", fmt.Errorf("error on parsing telegram answer %s", errRead.Error())
 	}
 
 	return string(bodyBytes), nil
