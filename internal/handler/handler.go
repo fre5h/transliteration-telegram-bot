@@ -26,7 +26,7 @@ func (lh LambdaHandler) HandleLambdaRequest(request events.LambdaFunctionURLRequ
 
 	err := json.Unmarshal([]byte(request.Body), &update)
 	if err != nil {
-		return createLambdaResponse(http.StatusInternalServerError, "Error on unmarshaling json")
+		return createLambdaResponse(http.StatusInternalServerError, "Error on unmarshal json")
 	}
 
 	if 0 == update.UpdateId {
