@@ -10,14 +10,13 @@ import (
 	"github.com/fre5h/transliteration-go"
 
 	"github.com/fre5h/transliteration-telegram-bot/internal/model"
-	"github.com/fre5h/transliteration-telegram-bot/internal/telegram"
 )
 
 type LambdaHandler struct {
-	telegramClient telegram.Client
+	telegramClient TelegramClient
 }
 
-func NewLambdaHandler(telegramClient telegram.Client) *LambdaHandler {
+func NewLambdaHandler(telegramClient TelegramClient) *LambdaHandler {
 	return &LambdaHandler{telegramClient: telegramClient}
 }
 

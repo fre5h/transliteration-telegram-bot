@@ -4,10 +4,12 @@ import (
 	"testing"
 
 	"github.com/aws/aws-lambda-go/events"
+
+	"github.com/fre5h/transliteration-telegram-bot/internal/mocks"
 )
 
 func TestHandleLambdaRequestInvalidUpdateId(t *testing.T) {
-	handler := NewLambdaHandler(NewMockOkHttpClient())
+	handler := NewLambdaHandler(mocks.NewMockOkClient())
 	response, _ := handler.HandleLambdaRequest(events.LambdaFunctionURLRequest{Body: "{\"update_id\":0}"})
 
 	if response.StatusCode != 400 {
@@ -16,7 +18,7 @@ func TestHandleLambdaRequestInvalidUpdateId(t *testing.T) {
 }
 
 func TestHandleLambdaRequestErrorOnUnmarshal(t *testing.T) {
-	handler := NewLambdaHandler(NewMockOkHttpClient())
+	handler := NewLambdaHandler(mocks.NewMockOkClient())
 	response, _ := handler.HandleLambdaRequest(events.LambdaFunctionURLRequest{Body: "123"})
 
 	if response.StatusCode != 500 {
@@ -25,7 +27,7 @@ func TestHandleLambdaRequestErrorOnUnmarshal(t *testing.T) {
 }
 
 func TestHandleLambdaRequestSuccessfully(t *testing.T) {
-	handler := NewLambdaHandler(NewMockOkHttpClient())
+	handler := NewLambdaHandler(mocks.NewMockOkClient())
 	response, _ := handler.HandleLambdaRequest(events.LambdaFunctionURLRequest{Body: `{"update_id":1,"message":{"text":"привіт","chat":{"id":1}}}`})
 
 	if response.StatusCode != 200 {
@@ -34,7 +36,7 @@ func TestHandleLambdaRequestSuccessfully(t *testing.T) {
 }
 
 func TestHandleLambdaRequestUnsuccessfullyRequestToTelegram(t *testing.T) {
-	handler := NewLambdaHandler(NewMockFailedHttpClient())
+	handler := NewLambdaHandler(mocks.NewMockFailedClient())
 	response, _ := handler.HandleLambdaRequest(events.LambdaFunctionURLRequest{Body: `{"update_id":1,"message":{"text":"привіт","chat":{"id":1}}}`})
 
 	if response.StatusCode != 500 {

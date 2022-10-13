@@ -1,35 +1,36 @@
-package telegram
+package handler
 
 import (
 	"fmt"
 	"io"
 	"log"
-	"net/http"
 	"net/url"
 	"os"
 	"strconv"
 )
 
-type Client interface {
+type TelegramClient interface {
 	SendTextMessageToChat(int, string) (string, error)
 }
 
-type HttpClient struct {
-	baseUrl string
-	token   string
+type TelegramHttpClient struct {
+	baseUrl    string
+	token      string
+	httpClient HttpClient
 }
 
-func NewClient() *HttpClient {
-	return &HttpClient{
-		baseUrl: "https://api.telegram.org/bot",
-		token:   os.Getenv("TELEGRAM_BOT_TOKEN"),
+func NewTelegramHttpClient(httpClient HttpClient) *TelegramHttpClient {
+	return &TelegramHttpClient{
+		baseUrl:    "https://api.telegram.org/bot",
+		token:      os.Getenv("TELEGRAM_BOT_TOKEN"),
+		httpClient: httpClient,
 	}
 }
 
-func (c HttpClient) SendTextMessageToChat(chatId int, text string) (string, error) {
+func (c TelegramHttpClient) SendTextMessageToChat(chatId int, text string) (string, error) {
 	var botApiUrl = c.baseUrl + c.token + "/sendMessage"
 
-	response, errRequest := http.PostForm(
+	response, err := c.httpClient.PostForm(
 		botApiUrl,
 		url.Values{
 			"chat_id": {strconv.Itoa(chatId)},
@@ -37,8 +38,8 @@ func (c HttpClient) SendTextMessageToChat(chatId int, text string) (string, erro
 		},
 	)
 
-	if nil != errRequest {
-		return "", fmt.Errorf("error when posting text to the chat: %s", errRequest.Error())
+	if nil != err {
+		return "", fmt.Errorf("error when posting text to the chat: %s", err.Error())
 	}
 
 	if 200 != response.StatusCode {
