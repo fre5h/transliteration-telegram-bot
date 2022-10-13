@@ -22,20 +22,24 @@ func HandleTelegramWebHook(request events.LambdaFunctionURLRequest) (events.Lamb
 
 	err := json.Unmarshal([]byte(request.Body), &update)
 	if err != nil {
-		return events.LambdaFunctionURLResponse{StatusCode: http.StatusInternalServerError, Body: "Error on unmarshaling json"}, nil
+		return createLambdaResponse(http.StatusInternalServerError, "Error on unmarshaling json")
 	}
 
 	if 0 == update.UpdateId {
-		return events.LambdaFunctionURLResponse{StatusCode: http.StatusBadRequest, Body: "Update id of 0 indicates failure to parse incoming update"}, nil
+		return createLambdaResponse(http.StatusBadRequest, "Update id of 0 indicates failure to parse incoming update")
 	}
 
 	if responseBody, err := sendTextMessageToChat(update.Message.Chat.Id, prepareResult(update.Message.Text)); err != nil {
 		log.Printf("error %s from telegram, response body is %s", err.Error(), responseBody)
 
-		return events.LambdaFunctionURLResponse{StatusCode: http.StatusInternalServerError, Body: "Error on request to Telegram"}, nil
+		return createLambdaResponse(http.StatusInternalServerError, "Error on request to Telegram")
 	}
 
-	return events.LambdaFunctionURLResponse{StatusCode: http.StatusOK, Body: "OK"}, nil
+	return createLambdaResponse(http.StatusOK, "OK")
+}
+
+func createLambdaResponse(statusCode int, body string) (events.LambdaFunctionURLResponse, error) {
+	return events.LambdaFunctionURLResponse{StatusCode: statusCode, Body: body}, nil
 }
 
 func prepareResult(text string) (result string) {
