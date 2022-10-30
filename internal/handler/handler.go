@@ -20,7 +20,7 @@ func NewLambdaHandler(telegramClient TelegramClient) *LambdaHandler {
 	return &LambdaHandler{telegramClient: telegramClient}
 }
 
-func (lh LambdaHandler) HandleLambdaRequest(request events.LambdaFunctionURLRequest) (events.LambdaFunctionURLResponse, error) {
+func (h LambdaHandler) HandleLambdaRequest(request events.LambdaFunctionURLRequest) (events.LambdaFunctionURLResponse, error) {
 	var update model.Update
 
 	err := json.Unmarshal([]byte(request.Body), &update)
@@ -32,7 +32,7 @@ func (lh LambdaHandler) HandleLambdaRequest(request events.LambdaFunctionURLRequ
 		return createLambdaResponse(http.StatusBadRequest, "Update id of 0 indicates failure to parse incoming update")
 	}
 
-	if responseBody, err := lh.telegramClient.SendTextMessageToChat(update.Message.Chat.Id, prepareResult(update.Message.Text)); err != nil {
+	if responseBody, err := h.telegramClient.SendTextMessageToChat(update.Message.Chat.Id, prepareResult(update.Message.Text)); err != nil {
 		log.Printf("error %s from telegram, response body is %s", err.Error(), responseBody)
 
 		return createLambdaResponse(http.StatusInternalServerError, "Error on request to Telegram")

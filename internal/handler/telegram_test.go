@@ -45,3 +45,16 @@ func TestSendTextMessageToChatWithNon200Code(t *testing.T) {
 		t.Errorf("Expected response to be empty string, got %s", response)
 	}
 }
+
+func TestSendTextMessageToChatWithErrorOnReadCloser(t *testing.T) {
+	client := NewTelegramHttpClient(mocks.NewMockHttpClientFailedCloser(200, "OK", nil))
+	response, err := client.SendTextMessageToChat(1, "test")
+
+	if err == nil {
+		t.Error("Expected to get an error")
+	}
+
+	if response != "" {
+		t.Errorf("Expected response to be empty string, got %s", response)
+	}
+}
