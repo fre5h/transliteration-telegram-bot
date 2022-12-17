@@ -1,4 +1,4 @@
-FROM golang:1.19.2-alpine AS builder
+FROM golang:1.19.4-alpine AS builder
 RUN mkdir /build
 RUN mkdir /build/internal
 ADD go.mod go.sum cmd/main.go /build/
