@@ -1,7 +1,7 @@
 module github.com/fre5h/transliteration-telegram-bot
 
-go 1.19
+go 1.20
 
-require github.com/fre5h/transliteration-go v1.1.5
+require github.com/fre5h/transliteration-go v1.2.0
 
-require github.com/aws/aws-lambda-go v1.37.0
+require github.com/aws/aws-lambda-go v1.38.0

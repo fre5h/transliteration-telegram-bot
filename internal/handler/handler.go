@@ -23,8 +23,7 @@ func NewLambdaHandler(telegramClient TelegramClient) *LambdaHandler {
 func (h LambdaHandler) HandleLambdaRequest(request events.LambdaFunctionURLRequest) (events.LambdaFunctionURLResponse, error) {
 	var update model.Update
 
-	err := json.Unmarshal([]byte(request.Body), &update)
-	if err != nil {
+	if err := json.Unmarshal([]byte(request.Body), &update); err != nil {
 		return createLambdaResponse(http.StatusInternalServerError, "Error on unmarshal json")
 	}
 

@@ -47,8 +47,7 @@ func (c TelegramHttpClient) SendTextMessageToChat(chatId int, text string) (stri
 	}
 
 	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if nil != err {
+		if err := Body.Close(); nil != err {
 			log.Printf("error on closing body: %s", err.Error())
 		}
 	}(response.Body)
