@@ -17,5 +17,5 @@
 coverage.txt
 
 # Lambda builds
-main
+bootstrap
 archive.zip
